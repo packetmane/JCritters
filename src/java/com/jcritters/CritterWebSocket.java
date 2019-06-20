@@ -1,7 +1,6 @@
 package com.jcritters;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javax.websocket.OnClose;
@@ -21,6 +20,8 @@ import org.json.JSONObject;
 @ServerEndpoint("/")
 public class CritterWebSocket {
     private static final World crittersWorld = new World();
+    // This just gets called here to invoke the constructor.
+    private static final RoomManager roomManager = new RoomManager();
     private Session session = null;
     private String id = null;
     private String nickname = null;
@@ -43,8 +44,8 @@ public class CritterWebSocket {
         
         openHandshake.put("sid", session.getId());
         openHandshake.put("upgrades", new JSONArray()); // empty JSONArray object for now
-        openHandshake.put("pingInterval", "25000");
-        openHandshake.put("pingTimeout", "5000");
+        openHandshake.put("pingInterval", 25000);
+        openHandshake.put("pingTimeout", 5000);
         
         JSONObject handshakeJSONObject = new JSONObject(openHandshake);
         
@@ -118,10 +119,6 @@ public class CritterWebSocket {
         this.room.add(this);
     }
     
-    public ArrayList<CritterWebSocket> getCritterWebSockets() {
-        return crittersWorld.getCritterWebSockets();
-    }
-    
     public void setCritterId(String critter) {
         this.critterId = critter;
     }
@@ -146,8 +143,8 @@ public class CritterWebSocket {
         this.rotation = rotation;
     }
     
-    public void setLoggedIn(boolean loggedIn) {
-        this.loggedIn = loggedIn;
+    public void setLoggedIn() {
+        this.loggedIn = true;
     }
     
     public void setRoom(Room room) {

@@ -49,7 +49,7 @@ public class Player {
         
         messageData.put("i", critterWebSocket.getId());
         messageData.put("n", critterWebSocket.getNickname());
-        messageData.put("m", messageJSONObject.getString("message"));
+        messageData.put("m", playerMessage);
         
         JSONObject messageDataJSONObject = new JSONObject(messageData);
         

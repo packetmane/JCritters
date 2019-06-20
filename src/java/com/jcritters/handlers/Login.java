@@ -42,6 +42,6 @@ public class Login {
         JSONObject loginDataJSONObject = new JSONObject(loginData);
         
         critterWebSocket.send("login", loginDataJSONObject);
-        critterWebSocket.setLoggedIn(true);
+        critterWebSocket.setLoggedIn();
     }
 }
