@@ -20,6 +20,7 @@ import org.json.JSONObject;
 @ServerEndpoint("/")
 public class CritterWebSocket {
     private static final World crittersWorld = new World();
+    private static final RoomManager roomManager = new RoomManager();
     private Session session = null;
     private String id = null;
     private String nickname = null;
@@ -179,6 +180,10 @@ public class CritterWebSocket {
     
     public String getCritterId() {
         return this.critterId;
+    }
+    
+    public RoomManager getRoomManager() {
+        return this.roomManager;
     }
     
     public void close() {

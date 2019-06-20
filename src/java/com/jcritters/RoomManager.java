@@ -8,7 +8,7 @@ import java.util.Map;
  * @author packetname
  */
 public class RoomManager {
-    private static final Map<String, Room> rooms = new HashMap<>();
+    private Map<String, Room> rooms = new HashMap<>();
     
     public RoomManager() {
         // Work on loading rooms from a JSON.
@@ -16,7 +16,7 @@ public class RoomManager {
         this.rooms.put("tavern", new Room("tavern", "Tavern", 850, 600, 2, "{\"background\":\"/media/rooms/tavern_bg.png\",\"foreground\":\"/media/rooms/tavern_fg.png\",\"sprites\":{\"images\":[\"/media/rooms/tavern_ss.png\"],\"frames\":[[577,161,170,61,0,85,42,455,180],[221,0,147,240,0,74,118,314,201],[625,0,181,161,0,90,52,301,341],[806,0,127,118,0,64,103,259,434],[0,0,221,174,0,110,133,670,245],[235,240,42,38,0,21,1,665,274],[353,242,37,35,0,18,3,592,252],[316,240,37,35,0,18,2,548,208],[933,0,83,151,0,31,122,830,245],[719,222,68,63,0,24,29,837,279],[195,240,40,40,0,20,2,484,307],[277,240,39,40,0,20,2,339,320],[0,174,103,78,0,52,49,409,336],[103,174,68,88,0,34,38,563,380],[965,239,53,33,0,26,4,430,415],[171,174,24,68,0,12,59,411,442],[906,151,118,88,0,59,37,496,399],[368,137,128,105,0,64,19,812,309],[368,0,257,137,0,129,48,722,357],[496,137,81,138,0,40,94,28,213],[806,118,100,147,0,70,111,12,292],[577,222,65,84,0,32,44,9,331],[779,161,22,34,0,11,23,162,246],[747,161,32,57,0,16,15,85,250],[642,222,77,64,0,39,45,127,204],[906,239,59,68,0,29,13,205,221]]}}"));
     }
     
-    public static Room getRoom(String roomId) {
-        return RoomManager.rooms.get(roomId);
+    public Room getRoom(String roomId) {
+        return this.rooms.get(roomId);
     }
 }

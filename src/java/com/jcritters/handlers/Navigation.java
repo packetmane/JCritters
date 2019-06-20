@@ -1,7 +1,6 @@
 package com.jcritters.handlers;
 
 import com.jcritters.CritterWebSocket;
-import com.jcritters.RoomManager;
 import org.json.JSONObject;
 
 /**
@@ -15,6 +14,6 @@ public class Navigation {
         critterWebSocket.setX(433); // default X
         critterWebSocket.setY(195); // default Y
         critterWebSocket.setRotation(180); // default rotation
-        RoomManager.getRoom(messageJSONObject.getString("roomId")).add(critterWebSocket);
+        critterWebSocket.getRoomManager().getRoom(messageJSONObject.getString("roomId")).add(critterWebSocket);
     }
 }

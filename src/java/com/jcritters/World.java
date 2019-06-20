@@ -36,9 +36,6 @@ public class World {
             this.worldHandlers.put("joinRoom", (critterWebSocket, message) -> Navigation.joinRoom(critterWebSocket, message));
             this.worldHandlers.put("click", (critterWebSocket, message) -> Player.movePlayer(critterWebSocket, message));
             this.worldHandlers.put("sendMessage", (critterWebSocket, message) -> Player.sendMessage(critterWebSocket, message));
-            
-            // Invoke the RoomManager class object's constructor.
-            new RoomManager();
         } catch(IOException e) {
             e.printStackTrace();
         }
