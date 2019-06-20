@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import org.json.JSONArray;
 import java.util.Properties;
+import org.json.JSONObject;
 
 /**
  *
@@ -19,7 +20,7 @@ import java.util.Properties;
  */
 public class World {
     private ArrayList<CritterWebSocket> critterWebSockets = new ArrayList<>();
-    private Map<String, BiConsumer<CritterWebSocket, String>> worldHandlers = new HashMap<>();
+    private Map<String, BiConsumer<CritterWebSocket, JSONObject>> worldHandlers = new HashMap<>();
     
     public World() {
         try {
@@ -32,10 +33,10 @@ public class World {
             PlayFabSettings.TitleId = configProperties.getProperty("PlayFabTitleId");
             PlayFabSettings.DeveloperSecretKey = configProperties.getProperty("PlayFabDeveloperSecretKey");
 
-            this.worldHandlers.put("login", (critterWebSocket, message) -> Login.handle(critterWebSocket, message));
-            this.worldHandlers.put("joinRoom", (critterWebSocket, message) -> Navigation.joinRoom(critterWebSocket, message));
-            this.worldHandlers.put("click", (critterWebSocket, message) -> Player.movePlayer(critterWebSocket, message));
-            this.worldHandlers.put("sendMessage", (critterWebSocket, message) -> Player.sendMessage(critterWebSocket, message));
+            this.worldHandlers.put("login", (critterWebSocket, messageJSONObject) -> Login.handle(critterWebSocket, messageJSONObject));
+            this.worldHandlers.put("joinRoom", (critterWebSocket, messageJSONObject) -> Navigation.joinRoom(critterWebSocket, messageJSONObject));
+            this.worldHandlers.put("click", (critterWebSocket, messageJSONObject) -> Player.movePlayer(critterWebSocket, messageJSONObject));
+            this.worldHandlers.put("sendMessage", (critterWebSocket, messageJSONObject) -> Player.sendMessage(critterWebSocket, messageJSONObject));
         } catch(IOException e) {
             e.printStackTrace();
         }
@@ -61,7 +62,9 @@ public class World {
                     }
                     
                     if(handleCritterWebSocket) {
-                        this.worldHandlers.get(messageId).accept(critterWebSocket, messageJSON);
+                        JSONObject messageJSONObject = new JSONObject(messageJSON);
+                        
+                        this.worldHandlers.get(messageId).accept(critterWebSocket, messageJSONObject);
                     } else {
                         // Trying to use successful-login-required handlers, while not logged in.
                         critterWebSocket.close();
@@ -77,7 +80,7 @@ public class World {
                 break;
             
             default:
-                // Any other messageValue is an incorrect message.
+                // Any other messageValue is an invalid message.
                 critterWebSocket.close();
                 break;
         }

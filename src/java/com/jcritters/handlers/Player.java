@@ -10,8 +10,7 @@ import org.json.JSONObject;
  * @author packetmane
  */
 public class Player {
-    public static void movePlayer(CritterWebSocket critterWebSocket, String message) {
-        JSONObject messageJSONObject = new JSONObject(message);
+    public static void movePlayer(CritterWebSocket critterWebSocket, JSONObject messageJSONObject) {
         int x = messageJSONObject.getInt("x");
         int y = messageJSONObject.getInt("y");
         int positionAngle = (int) ((180 / Math.PI) * - Math.atan2(x - critterWebSocket.getX(), y - critterWebSocket.getY()) + 180); // ?
@@ -29,8 +28,7 @@ public class Player {
         critterWebSocket.getRoom().send("X", positionDataJSONObject);
     }
     
-    public static void sendMessage(CritterWebSocket critterWebSocket, String message) {
-        JSONObject messageJSONObject = new JSONObject(message);
+    public static void sendMessage(CritterWebSocket critterWebSocket, JSONObject messageJSONObject) {
         String playerMessage = messageJSONObject.getString("message");
         
         // Move "Commands" to a plugin, comment this out if "Commands" should be disabled.

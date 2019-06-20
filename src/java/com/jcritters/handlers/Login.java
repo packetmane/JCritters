@@ -13,8 +13,7 @@ import org.json.JSONObject;
  * @author packetmane
  */
 public class Login {
-    public static void handle(CritterWebSocket critterWebSocket, String message) {
-        JSONObject messageJSONObject = new JSONObject(message);
+    public static void handle(CritterWebSocket critterWebSocket, JSONObject messageJSONObject) {
         PlayFabServerModels.AuthenticateSessionTicketRequest sessionTicketAuthenticationRequest = new PlayFabServerModels.AuthenticateSessionTicketRequest();
         
         sessionTicketAuthenticationRequest.SessionTicket = messageJSONObject.getString("ticket");

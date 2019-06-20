@@ -21,6 +21,7 @@ import org.json.JSONObject;
 public class CritterWebSocket {
     private static final World crittersWorld = new World();
     private static final RoomManager roomManager = new RoomManager();
+    
     private Session session = null;
     private String id = null;
     private String nickname = null;
@@ -36,8 +37,7 @@ public class CritterWebSocket {
         System.out.println("onOpen: " + session.getId());
         
         this.session = session;
-        
-        crittersWorld.addCritterWebSocketToWorld(this);
+        this.crittersWorld.addCritterWebSocketToWorld(this);
         
         Map<String, Object> openHandshake = new HashMap<>();
         
@@ -56,7 +56,7 @@ public class CritterWebSocket {
     public void onClose(Session session) {
         System.out.println("onClose: " + session.getId());
         
-        crittersWorld.removeCritterWebSocketFromWorld(this);
+        this.crittersWorld.removeCritterWebSocketFromWorld(this);
         this.room.remove(this);
     }
     
@@ -64,7 +64,7 @@ public class CritterWebSocket {
     public void onMessage(String message, Session session) {
         System.out.println("onMessage: " + session.getId());
         
-        crittersWorld.handleMessage(this, message);
+        this.crittersWorld.handleMessage(this, message);
     }
     
     @OnError
