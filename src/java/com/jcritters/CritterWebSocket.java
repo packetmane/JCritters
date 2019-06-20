@@ -186,13 +186,9 @@ public class CritterWebSocket {
         return this.critterId;
     }
     
-    public Session getSession() {
-        return this.session;
-    }
-    
     public void close() {
         try {
-            this.getSession().close();
+            this.session.close();
         } catch(IOException e) {
             e.printStackTrace();
         }

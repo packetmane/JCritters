@@ -35,14 +35,13 @@ public class Room {
             critterWebSocket.getRoom().remove(critterWebSocket);
         }
         
+        this.roomCritterWebSockets.add(critterWebSocket);
+        
         ArrayList<JSONObject> crittersList = new ArrayList<>();
         
         for(CritterWebSocket critterWebSocketObj : roomCritterWebSockets) {
             crittersList.add(critterWebSocketObj.getCritterDataJSONObject());
         }
-        
-        critterWebSocket.setRoom(this);
-        this.roomCritterWebSockets.add(critterWebSocket);
         
         Map<String, Object> roomData = new HashMap<>();
         
@@ -56,6 +55,7 @@ public class Room {
         
         JSONObject roomDataJSONObject = new JSONObject(roomData);
         
+        critterWebSocket.setRoom(this);
         critterWebSocket.send("joinRoom", roomDataJSONObject);
         this.send("A", critterWebSocket.getCritterDataJSONObject());
     }
