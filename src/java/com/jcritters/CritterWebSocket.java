@@ -20,7 +20,6 @@ import org.json.JSONObject;
 @ServerEndpoint("/")
 public class CritterWebSocket {
     private static final World crittersWorld = new World();
-    // This just gets called here to invoke the constructor.
     private static final RoomManager roomManager = new RoomManager();
     private Session session = null;
     private String id = null;
