@@ -3,6 +3,7 @@ package com.jcritters;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import javax.inject.Inject;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
@@ -17,10 +18,10 @@ import org.json.JSONObject;
  * @author packetmane
  */
 
-@ServerEndpoint("/")
+@ServerEndpoint("/socket.io/")
 public class CritterWebSocket {
-    private static final World crittersWorld = new World();
-    private static final RoomManager roomManager = new RoomManager();
+    private @Inject World crittersWorld;
+    private @Inject RoomManager roomManager;
     
     private Session session = null;
     private String id = null;
@@ -46,9 +47,9 @@ public class CritterWebSocket {
         openHandshake.put("pingInterval", 25000);
         openHandshake.put("pingTimeout", 5000);
         
-        JSONObject handshakeJSONObject = new JSONObject(openHandshake);
+        JSONObject handshakeJSONObj = new JSONObject(openHandshake);
         
-        this.send("0" + handshakeJSONObject);
+        this.send("0" + handshakeJSONObj);
         this.send("40");
     }
     
@@ -72,7 +73,7 @@ public class CritterWebSocket {
         System.out.println("onError: " + t.getMessage());
     }
     
-    public JSONObject getCritterDataJSONObject() {
+    public JSONObject getCritterDataJSONObj() {
         Map<String, Object> critterData = new HashMap<>();
         
         critterData.put("i", this.id);
@@ -84,9 +85,9 @@ public class CritterWebSocket {
         critterData.put("r", this.rotation);
         critterData.put("s", 5); // ?
         
-        JSONObject critterDataJSONObject = new JSONObject(critterData);
+        JSONObject critterDataJSONObj = new JSONObject(critterData);
         
-        return critterDataJSONObject;
+        return critterDataJSONObj;
     }
     
     public void send(String message) {

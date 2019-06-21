@@ -12,31 +12,41 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import org.json.JSONArray;
 import java.util.Properties;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Named;
 import org.json.JSONObject;
 
 /**
  *
  * @author packetmane
  */
+
+@Named
+@ApplicationScoped
 public class World {
     private ArrayList<CritterWebSocket> critterWebSockets = new ArrayList<>();
     private Map<String, BiConsumer<CritterWebSocket, JSONObject>> worldHandlers = new HashMap<>();
     
+    // Avoid the use of static variables.
+    private Login loginHandler = new Login();
+    private Navigation navigationHandlers = new Navigation();
+    private Player playerHandlers = new Player();
+    
     public World() {
         try {
             Properties configProperties = new Properties();
-            String configPropertiesFile = "/com/jcritters/resources/config.properties";
-            InputStream configInputStream = getClass().getClassLoader().getResourceAsStream(configPropertiesFile);
+            String configPropertiesFile = "/com/jcritters/resources/properties/config.properties";
+            InputStream configPropertiesInputStream = getClass().getClassLoader().getResourceAsStream(configPropertiesFile);
 
-            configProperties.load(configInputStream);
+            configProperties.load(configPropertiesInputStream);
 
             PlayFabSettings.TitleId = configProperties.getProperty("PlayFabTitleId");
             PlayFabSettings.DeveloperSecretKey = configProperties.getProperty("PlayFabDeveloperSecretKey");
 
-            this.worldHandlers.put("login", (critterWebSocket, messageJSONObject) -> Login.handle(critterWebSocket, messageJSONObject));
-            this.worldHandlers.put("joinRoom", (critterWebSocket, messageJSONObject) -> Navigation.joinRoom(critterWebSocket, messageJSONObject));
-            this.worldHandlers.put("click", (critterWebSocket, messageJSONObject) -> Player.movePlayer(critterWebSocket, messageJSONObject));
-            this.worldHandlers.put("sendMessage", (critterWebSocket, messageJSONObject) -> Player.sendMessage(critterWebSocket, messageJSONObject));
+            this.worldHandlers.put("login", (critterWebSocket, messageJSONObj) -> loginHandler.handle(critterWebSocket, messageJSONObj));
+            this.worldHandlers.put("joinRoom", (critterWebSocket, messageJSONObj) -> navigationHandlers.joinRoom(critterWebSocket, messageJSONObj));
+            this.worldHandlers.put("click", (critterWebSocket, messageJSONObj) -> playerHandlers.movePlayer(critterWebSocket, messageJSONObj));
+            this.worldHandlers.put("sendMessage", (critterWebSocket, messageJSONObj) -> playerHandlers.sendMessage(critterWebSocket, messageJSONObj));
         } catch(IOException e) {
             e.printStackTrace();
         }
@@ -62,9 +72,9 @@ public class World {
                     }
                     
                     if(handleCritterWebSocket) {
-                        JSONObject messageJSONObject = new JSONObject(messageJSON);
+                        JSONObject messageJSONObj = new JSONObject(messageJSON);
                         
-                        this.worldHandlers.get(messageId).accept(critterWebSocket, messageJSONObject);
+                        this.worldHandlers.get(messageId).accept(critterWebSocket, messageJSONObj);
                     } else {
                         // Trying to use successful-login-required handlers, while not logged in.
                         critterWebSocket.close();

@@ -13,10 +13,10 @@ import org.json.JSONObject;
  * @author packetmane
  */
 public class Login {
-    public static void handle(CritterWebSocket critterWebSocket, JSONObject messageJSONObject) {
+    public void handle(CritterWebSocket critterWebSocket, JSONObject messageJSONObj) {
         PlayFabServerModels.AuthenticateSessionTicketRequest sessionTicketAuthenticationRequest = new PlayFabServerModels.AuthenticateSessionTicketRequest();
         
-        sessionTicketAuthenticationRequest.SessionTicket = messageJSONObject.getString("ticket");
+        sessionTicketAuthenticationRequest.SessionTicket = messageJSONObj.getString("ticket");
         String id = PlayFabServerAPI.AuthenticateSessionTicket(sessionTicketAuthenticationRequest).Result.UserInfo.PlayFabId;
         
         critterWebSocket.setId(id);
@@ -38,9 +38,9 @@ public class Login {
         loginData.put("inventory", new JSONArray()); // empty JSONArray object for now
         loginData.put("gear", new JSONObject()); // empty JSONObject object for now
         
-        JSONObject loginDataJSONObject = new JSONObject(loginData);
+        JSONObject loginDataJSONObj = new JSONObject(loginData);
         
-        critterWebSocket.send("login", loginDataJSONObject);
+        critterWebSocket.send("login", loginDataJSONObj);
         critterWebSocket.setLoggedIn();
     }
 }

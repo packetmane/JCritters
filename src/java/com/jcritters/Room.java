@@ -17,15 +17,15 @@ public class Room {
     private int height = 0;
     private int version = 0;
     private ArrayList<CritterWebSocket> roomCritterWebSockets = new ArrayList<>();
-    private String artwork = null; // should be a JSONObject
+    private JSONObject artwork = null;
     
-    public Room(String id, String name, int width, int height, int version, String artwork) {
-        this.id = id;
-        this.name = name;
-        this.width = width;
-        this.height = height;
-        this.version = version;
-        this.artwork = artwork;
+    public Room(JSONObject roomJSONObj) {
+        this.id = roomJSONObj.getString("id");
+        this.name = roomJSONObj.getString("name");
+        this.width = roomJSONObj.getInt("width");
+        this.height = roomJSONObj.getInt("height");
+        this.version = roomJSONObj.getInt("version");
+        this.artwork = roomJSONObj.getJSONObject("artwork");
     }
     
     public void add(CritterWebSocket critterWebSocket) {
@@ -40,7 +40,7 @@ public class Room {
         ArrayList<JSONObject> crittersList = new ArrayList<>();
         
         for(CritterWebSocket critterWebSocketObj : roomCritterWebSockets) {
-            crittersList.add(critterWebSocketObj.getCritterDataJSONObject());
+            crittersList.add(critterWebSocketObj.getCritterDataJSONObj());
         }
         
         Map<String, Object> roomData = new HashMap<>();
@@ -51,17 +51,17 @@ public class Room {
         roomData.put("width", this.width);
         roomData.put("height", this.height);
         roomData.put("playerlist", new JSONArray(crittersList));
-        roomData.put("artwork", new JSONObject(this.artwork));
+        roomData.put("artwork", this.artwork);
         
-        JSONObject roomDataJSONObject = new JSONObject(roomData);
+        JSONObject roomDataJSONObj = new JSONObject(roomData);
         
         critterWebSocket.setRoom(this);
-        critterWebSocket.send("joinRoom", roomDataJSONObject);
-        this.send("A", critterWebSocket.getCritterDataJSONObject());
+        critterWebSocket.send("joinRoom", roomDataJSONObj);
+        this.send("A", critterWebSocket.getCritterDataJSONObj());
     }
     
     public void remove(CritterWebSocket critterWebSocket) {
-        System.out.println("Room:remove()`; " + critterWebSocket.getId());
+        System.out.println("Room:remove(): " + critterWebSocket.getId());
         
         this.roomCritterWebSockets.remove(critterWebSocket);
         
@@ -69,14 +69,18 @@ public class Room {
         
         critterData.put("i", critterWebSocket.getId());
         
-        JSONObject critterDataJSONObject = new JSONObject(critterData);
+        JSONObject critterDataJSONObj = new JSONObject(critterData);
         
-        this.send("R", critterDataJSONObject);
+        this.send("R", critterDataJSONObj);
     }
     
-    public void send(String messageId, JSONObject messageDataJSONObject) {
+    public void send(String messageId, JSONObject messageDataJSONObj) {
         for(CritterWebSocket critterWebSocket : roomCritterWebSockets) {
-            critterWebSocket.send(messageId, messageDataJSONObject);
+            critterWebSocket.send(messageId, messageDataJSONObj);
         }
+    }
+    
+    public String getId() {
+        return this.id;
     }
 }
