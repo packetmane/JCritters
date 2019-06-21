@@ -63,13 +63,9 @@ public class World {
 
                 if(this.worldHandlers.containsKey(messageId)) {
                     // If not a "login" command, then check if the user is logged in before handling it.
-                    boolean handleCritterWebSocket = false;
-                    
-                    if(messageId.equals("login")) {
-                        handleCritterWebSocket = true;
-                    } else if(critterWebSocket.isLoggedIn()) {
-                        handleCritterWebSocket = true;
-                    }
+                    boolean handleCritterWebSocket = messageId.equals("login") || critterWebSocket.isLoggedIn()
+                            ? true
+                            : false;
                     
                     if(handleCritterWebSocket) {
                         JSONObject messageJSONObj = new JSONObject(messageJSON);
@@ -80,7 +76,7 @@ public class World {
                         critterWebSocket.close();
                     }
                 } else {
-                    System.out.println("World handler can't been identified - " + messageId);
+                    System.out.println("World handler can't be identified - " + messageId);
                 }
                 break;
             
