@@ -42,6 +42,8 @@ public class RoomManager {
         for(Room roomObj : this.rooms) {
             if(roomObj.getId().equals(roomId)) {
                 room = roomObj;
+                
+                break;
             }
         }
         

@@ -19,6 +19,13 @@ public class Login {
         sessionTicketAuthenticationRequest.SessionTicket = messageJSONObj.getString("ticket");
         String id = PlayFabServerAPI.AuthenticateSessionTicket(sessionTicketAuthenticationRequest).Result.UserInfo.PlayFabId;
         
+        CritterWebSocket critterWebSocketObj = critterWebSocket.getWorld().getCritterById(id);
+        
+        if(critterWebSocketObj != null) {
+            // Disconnect the other session.
+            critterWebSocketObj.close();
+        }
+        
         critterWebSocket.setId(id);
         
         PlayFabServerModels.GetPlayerProfileRequest getPlayerProfileRequest = new PlayFabServerModels.GetPlayerProfileRequest();

@@ -99,4 +99,21 @@ public class World {
     public void removeCritterWebSocketFromWorld(CritterWebSocket critterWebSocket) {
         this.critterWebSockets.remove(critterWebSocket);
     }
+    
+    public CritterWebSocket getCritterById(String critterId) {
+        CritterWebSocket critterWebSocket = null;
+        
+        for(CritterWebSocket critterWebSocketObj : this.critterWebSockets) {
+            if(critterWebSocketObj != null) {
+                if(critterWebSocketObj.getId() != null &&
+                        critterWebSocketObj.getId().equals(critterId)) {
+                    critterWebSocket = critterWebSocketObj;
+
+                    break;
+                }
+            }
+        }
+        
+        return critterWebSocket;
+    }
 }

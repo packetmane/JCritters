@@ -187,6 +187,10 @@ public class CritterWebSocket {
         return this.roomManager;
     }
     
+    public World getWorld() {
+        return this.crittersWorld;
+    }
+    
     public void close() {
         try {
             this.session.close();
